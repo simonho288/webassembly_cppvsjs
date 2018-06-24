@@ -157,15 +157,44 @@ Click [here](https://github.com/simonho288/webassembly_cppvsjs/index.html) to vi
 
 ## 4. Develop Javascript Module
 
-### Product JS Source Codes
-
-### Array operation using Lodash
+To make the comparsion between Webassembly and Javascript. I developed a Javascript module which performs same operations as what the C++ module does. I used [Lodash](https://lodash.com/) to process the products array. You can view the contents of [product.js](https://github.com/simonho288/webassembly_cppvsjs/product.js) file. Below is the main operations:
+```javascript
+...
+function ProcessProducts() {
+  let products = CreateProducts();
+  let products1 = _.filter(products, (product) => {
+    return product._price >= 20.0 && product._price <= 200.0;
+  });
+  let products2 = _.filter(products1, (product) => {
+    return product._description.includes('pretium');
+  });
+  let products3 = _.sortBy(products2, '_price');
+  return products3;
+}
+...
+```
 
 ## 5. Performance Comparsion Result
 
-### C++ execution result
+At this time, we can run a webserver to browse the website to start the comparsion. At the project root directory, start the http-server as below commands (if you haven't installed the http-server, you can install it via `npm install -g http-server`):
 
-### JS execution result
+```bash
+$ http-server
+# Starting up http-server, serving ./
+# Available on:
+#   http://127.0.0.1:8080
+```
+
+Open the Chrome browser (version 57 or above) to browse `http://localhost:8080`. Below is the website screenshot:
+
+[05_website.png]
+
+### Result of my PC
+
+You can click C++ and JS execute buttons one by one. Below is the result of my Macbook 2016:
+
+[06_execute_result.png]
 
 ## 6. Conclusion
 
+As you can see, Javascript out-performs C++ nearly 3 times. This surprised me. It represents Google's V8 engine is really very fast even faster than C++ STL.
