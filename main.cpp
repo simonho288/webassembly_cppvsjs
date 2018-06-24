@@ -50,6 +50,7 @@ auto ProcessProducts() {
 extern "C" {
 #endif
 
+// Exposes this function to javascript.
 double EMSCRIPTEN_KEEPALIVE ProcessMillionTimes(int argc, char** argv) {
   clock_t begin = clock();
 
@@ -73,7 +74,13 @@ double EMSCRIPTEN_KEEPALIVE ProcessMillionTimes(int argc, char** argv) {
 }
 #endif
 
-int main() {
-  cout << "Elapsed second: " << FindMillionTimes(0, 0) << endl;
+int main()
+{
+#if !defined(NDEBUG)
+  double time = ProcessMillionTimes(0, 0);
+  cout << "Elapsed second: " << time << endl;
+  getchar();
+#endif
+
   return 0;
 }

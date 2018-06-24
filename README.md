@@ -24,6 +24,8 @@ $ java -version
 # java version "1.8.0_171"
 $ clang++ -v
 # clang version 6.0.1  (emscripten 1.38.6 : 1.38.6)
+$ cmake -version
+# cmake version 3.11.4
 ```
 
 ### Install Visual Studio Code
@@ -54,13 +56,77 @@ $ emcc -v
 
 ### Create the project
 
-### C++ Main program
+Before create the project, make sure you have run the `source ./emsdk_env.sh` in Emscripten directory. Then type this commands:
 
-### Product Source Codes
+```bash
+$ cd ~/code # suppose your codebase in ~/Code
+$ mkdir wasm_exp && cd wasm_exp
+```
+
+Create the module files as below:
+1. [main.cpp](https://github.com/simonho288/webassembly_cppvsjs/main.cpp)
+  - This is the main program file.
+  - Create the products array.
+  - Operate the products array (two filtering and one sorting).
+  - Perform one million times operations on the product array.
+2. [headers.h](https://github.com/simonho288/webassembly_cppvsjs/headers.h)
+  - Include all STL headers. The products array operations are using STL vector.
+3. [product.h](https://github.com/simonho288/webassembly_cppvsjs/product.h)
+  - Declare a product object
+4. [product.cpp](https://github.com/simonho288/webassembly_cppvsjs/product.cpp)
+  - Operator overloaded function for dumping the product to ostream such as cout.
+5. [Makefile](https://github.com/simonho288/webassembly_cppvsjs/Makefile)
+
 
 ### VSCode settings for build and debug
 
-### Makefile
+Now you can run the C++ module inside the VSCode. To do that, create two files: `tasks.json` & `launch.json`. VSCode can help you to create the `tasks.json`. In VScode editor, click menu "Tasks"->"Configure Default Build Task..."->"Create tasks.json file from template"->"Others". Like the screenshot below:
+
+[02_tasks_json.png]
+
+Replace the tasks.json with below contents:
+
+```json
+{
+"version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "make debug",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    }
+  ]
+}
+```
+
+Next one is to create launch.json for debug. In VSCode, click "Debug" tab, then select 'Configure or fix launch.json' as below screenshot:
+
+[03_launch_json.png]
+
+Modify the two settings in `launch.json':
+```json
+...
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/app",
+...
+```
+
 
 ## 3. Develop Web Interface
 
