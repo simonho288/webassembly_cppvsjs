@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>JS vs WASM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.2/semantic.min.css" rel="stylesheet" type="text/css" />
+  <style>
+    body {
+      margin: 30px;
+    }
+  </style>
+  </head>
+
+  <body>
+    <div class="ui container">
+      <div class="ui grid">
+        <div class="sixteen wide column">
+          <h1>JS vs WASM</h1>
+          <div class="ui message">
+            <div class="header">
+              Webassembly Demo
+            </div>
+            <p>
+              This is a demo webapp to demonstrate a webapp calls to external C++ module which compiled using <a href="http://emscripten.org" target="_blank">emscripten</a>. The C++ is written with STL in C++14 language standard.
+            </p>
+            <p>
+              The overview of external C++ module is to create 10 products in a vector. Then performs two filtering operations and finally sort the filtered products by price in asscending order.
+            </p>
+            <p>
+              Notes:
+            </p>
+            <ul class="list">
+              <li>This webapp I tested in Chrome 67</li>
+            </ul>
+          </div>
+
+          <div class="ui info message">
+            <i class="close icon"></i>
+            <div class="header">
+              Be patient!
+            </div>
+            <ul class="list">
+              <li>This is a time-consuming operation. It may take a minute to complete</li>
+              <li>You can open developer console to see the output messages</li>
+            </ul>
+          </div>
+
+          <div class="ui center aligned basic segment">
+            <!-- Execute C++ module -->
+            <div id="cpp_module">
+              <button id="cpp" class="ui button btn_popup" data-content="This will call external function Module._ProcessMillionTimes()">Execute C++ module</button>
+              <br />
+              <div class="ui statistic" style="display:none">
+                <div class="value"></div>
+                <div class="label">
+                  Seconds
+                </div>
+              </div>
+            </div>
+
+            <div class="ui horizontal divider header">
+              <i class="tachometer alternate icon"></i>
+              VS
+            </div>
+
+            <!-- Execute JS module -->
+            <div id="js_module">
+              <button id="js" class="ui button btn_popup" data-content="This will call ProcessMillionTimes() in product.js">Execute JS module</button>
+              <br />
+              <div class="ui statistic" style="display:none">
+                <div class="value"></div>
+                <div class="label">
+                  Seconds
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+
+<script async type="text/javascript" src="app.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.2/semantic.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
+<script type="text/javascript" src="product.js"></script>
+
+<script>
+// My javascript module
+$(document).ready(() => {
+  $('.btn_popup').popup();
+
+  $('#cpp').click((evt) => {
+    $(evt.target).addClass('loading');
+    $('.button').attr('disabled', true);
+    $('#cpp_module .statistic').hide();
+    setTimeout(() => {
+      let timeDiff = Module._ProcessMillionTimes(); // this is the external WASM function
+      $('#cpp_module .value').html(timeDiff);
+      $('#cpp_module .statistic').show();
+      $(evt.target).removeClass('loading');
+      $('.button').removeAttr('disabled');
+    }, 500);
+  });
+
+  $('#js').click((evt) => {
+    $(evt.target).addClass('loading');
+    $('.button').attr('disabled', true);
+    $('#js_module .statistic').hide();
+    setTimeout(() => {
+      let timeDiff = ProcessMillionTimes(); // this is the JS version covered in product.js
+      $('#js_module .value').html(timeDiff);
+      $('#js_module .statistic').show();
+      $(evt.target).removeClass('loading');
+      $('.button').removeAttr('disabled');
+    }, 500);
+  });
+});
+
+</script>
+</html>
