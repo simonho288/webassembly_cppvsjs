@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repo hosts the source codes for the [blog](https://blog.simonho.net/webassembly_cppvsjs/) which demonstrates how to call the external C++ module from Javascript. In addition, it also compares the performance for manipulating a list of products in C++ (with STL) versus Javascript (with Lodash).
+This repo hosts the source codes for the [blog](https://blog.simonho.net/2018/06/webassembly-experiment-c-vs-js.html) which demonstrates how to call the external C++ module from Javascript. In addition, it also compares the performance for manipulating a list of products in C++ (with STL) versus Javascript (with Lodash).
 
 ## Installation
 
